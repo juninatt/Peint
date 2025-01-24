@@ -1,9 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.BorderPane?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="se.pbt.peint.CanvasController" fx:id="rootPane">
-    <!-- Canvas för ritning -->
-    <Canvas fx:id="canvas" width="800" height="600" />
-</StackPane>
+<BorderPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml" fx:controller="se.pbt.peint.PeintController">
+    <!-- Toolbar -->
+    <top>
+        <ToolBar fx:id="toolBar">
+            <Button text="S" onAction="#onSave">
+                <tooltip>
+                    <Tooltip text="Save your drawing" />
+                </tooltip>
+            </Button>
+            <Button text="L" onAction="#onLoad">
+                <tooltip>
+                    <Tooltip text="Load a saved drawing" />
+                </tooltip>
+            </Button>
+            <Button text="↺" onAction="#onUndo">
+                <tooltip>
+                    <Tooltip text="Undo last action" />
+                </tooltip>
+            </Button>
+            <Button text="↻" onAction="#onRedo">
+                <tooltip>
+                    <Tooltip text="Redo last action" />
+                </tooltip>
+            </Button>
+            <Button text="F" onAction="#onFill">
+                <tooltip>
+                    <Tooltip text="Fill area with color" />
+                </tooltip>
+            </Button>
+            <Button text="⭷" onAction="#onToggleToolbarPosition">
+                <tooltip>
+                    <Tooltip text="Toggle toolbar position" />
+                </tooltip>
+            </Button>
+            <Button text="C" onAction="#onClearCanvas">
+                <tooltip>
+                    <Tooltip text="Clear the canvas" />
+                </tooltip>
+            </Button>
+        </ToolBar>
+    </top>
+    <!-- Canvas -->
+    <center>
+        <Canvas fx:id="canvas" width="800" height="600" />
+    </center>
+</BorderPane>
