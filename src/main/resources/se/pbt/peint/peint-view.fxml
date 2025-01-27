@@ -17,7 +17,7 @@
             </Button>
             <Button text="L" onAction="#onLoad">
                 <tooltip>
-                    <Tooltip text="Load a saved drawing" />
+                    <Tooltip text="Load an image onto the canvas" />
                 </tooltip>
             </Button>
             <Button text="↺" onAction="#onUndo">

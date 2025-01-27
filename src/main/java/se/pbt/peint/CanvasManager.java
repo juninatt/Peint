@@ -39,11 +39,12 @@ public class CanvasManager {
         });
     }
 
-    private void saveState() {
+    public void saveState() {
+        // Save the current canvas state to undoStack
         WritableImage snapshot = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
         canvas.snapshot(null, snapshot);
         undoStack.push(SwingFXUtils.fromFXImage(snapshot, null));
-        redoStack.clear();
+        redoStack.clear(); // Clear redoStack for new actions
     }
 
     public void undo() {
@@ -65,6 +66,11 @@ public class CanvasManager {
     public void clearCanvas() {
         saveState();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    }
+
+    public void loadImage(BufferedImage image) {
+        saveState();
+        gc.drawImage(SwingFXUtils.toFXImage(image, null), 0, 0);
     }
 }
 

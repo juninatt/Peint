@@ -4,6 +4,12 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class PeintController {
 
@@ -31,7 +37,22 @@ public class PeintController {
 
     @FXML
     private void onLoad() {
-        System.out.println("Load clicked");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Image File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.bmp")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            try {
+                BufferedImage image = ImageIO.read(selectedFile);
+                canvasManager.loadImage(image);
+                System.out.println("Image loaded: " + selectedFile.getName());
+            } catch (IOException e) {
+                System.err.println("Failed to load image: " + e.getMessage());
+            }
+        }
     }
 
     @FXML
