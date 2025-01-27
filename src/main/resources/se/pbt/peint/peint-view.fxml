@@ -12,7 +12,7 @@
         <ToolBar fx:id="toolBar">
             <Button text="S" onAction="#onSave">
                 <tooltip>
-                    <Tooltip text="Save your drawing" />
+                    <Tooltip text="Save the canvas as an image file" />
                 </tooltip>
             </Button>
             <Button text="L" onAction="#onLoad">
