@@ -37,10 +37,7 @@ public class PeintController {
         toolbarManager = new ToolbarManager(toolBar, rootPane);
 
         colorPicker.setValue(Color.BLACK);
-        colorPicker.setOnAction(event -> {
-            canvasManager.setDrawingColor(colorPicker.getValue());
-            System.out.println("Selected color: " + colorPicker.getValue());
-        });
+        colorPicker.setOnAction(event -> canvasManager.setDrawingColor(colorPicker.getValue()));
     }
 
     @FXML
@@ -71,8 +68,6 @@ public class PeintController {
                 // Save the image using ImageIO
                 BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
                 ImageIO.write(bufferedImage, fileExtension, saveFile);
-
-                System.out.println("Canvas saved as: " + saveFile.getName());
             } catch (IOException e) {
                 System.err.println("Failed to save image: " + e.getMessage());
             }
@@ -96,7 +91,6 @@ public class PeintController {
 
                 if (image != null) {
                     canvasManager.loadImage(image); // Draw the image on the canvas
-                    System.out.println("Image loaded: " + selectedFile.getName());
                 } else {
                     System.err.println("Invalid image file: " + selectedFile.getName());
                 }
@@ -106,24 +100,24 @@ public class PeintController {
         }
     }
 
-
     @FXML
     private void onUndo() {
         canvasManager.undo();
-        System.out.println("Undo performed");
     }
 
     @FXML
     private void onRedo() {
         canvasManager.redo();
-        System.out.println("Redo performed");
     }
 
-
     @FXML
-    private void onFill() {
-        canvasManager.fillCanvas();
-        System.out.println("Canvas filled with color: " + colorPicker.getValue());
+    private void onBucketFill() {
+        canvas.setOnMouseClicked(event -> {
+            double x = event.getX();
+            double y = event.getY();
+            canvasManager.bucketFill(x, y, colorPicker.getValue());
+            resetCanvasEvents();
+        });
     }
 
     @FXML
@@ -134,7 +128,12 @@ public class PeintController {
     @FXML
     private void onClearCanvas() {
         canvasManager.clearCanvas();
-        System.out.println("Canvas cleared");
+    }
+
+    private void resetCanvasEvents() {
+        canvas.setOnMousePressed(null);
+        canvas.setOnMouseDragged(null);
+        canvas.setOnMouseReleased(null);
     }
 
 

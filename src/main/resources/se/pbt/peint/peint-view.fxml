@@ -39,16 +39,16 @@
                 </tooltip>
             </Button>
             <!-- Coloring -->
-            <Button text="F" onAction="#onFill">
-                <tooltip>
-                    <Tooltip text="Fill the canvas with the selected color" />
-                </tooltip>
-            </Button>
             <ColorPicker fx:id="colorPicker">
                 <tooltip>
                     <Tooltip text="Select a color for drawing" />
                 </tooltip>
             </ColorPicker>
+            <Button text="B" onAction="#onBucketFill">
+                <tooltip>
+                    <Tooltip text="Click to fill an area with the selected color" />
+                </tooltip>
+            </Button>
             <!-- Toolbar Positioning -->
             <Button text="⭷" onAction="#onToggleToolbarPosition">
                 <tooltip>
