@@ -36,13 +36,16 @@ public class PeintController {
 
     @FXML
     private void onUndo() {
-        System.out.println("Undo clicked");
+        canvasManager.undo();
+        System.out.println("Undo performed");
     }
 
     @FXML
     private void onRedo() {
-        System.out.println("Redo clicked");
+        canvasManager.redo();
+        System.out.println("Redo performed");
     }
+
 
     @FXML
     private void onFill() {

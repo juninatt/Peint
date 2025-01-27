@@ -27,7 +27,7 @@
             </Button>
             <Button text="↻" onAction="#onRedo">
                 <tooltip>
-                    <Tooltip text="Redo last action" />
+                    <Tooltip text="Redo last undone action" />
                 </tooltip>
             </Button>
             <Button text="F" onAction="#onFill">
