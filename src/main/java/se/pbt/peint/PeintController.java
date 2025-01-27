@@ -70,6 +70,7 @@ public class PeintController {
 
     @FXML
     private void onLoad() {
+        // Open FileChooser for image selection
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Image File");
         fileChooser.getExtensionFilters().addAll(
@@ -79,14 +80,21 @@ public class PeintController {
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             try {
+                // Read the selected file as an image
                 BufferedImage image = ImageIO.read(selectedFile);
-                canvasManager.loadImage(image);
-                System.out.println("Image loaded: " + selectedFile.getName());
+
+                if (image != null) {
+                    canvasManager.loadImage(image); // Draw the image on the canvas
+                    System.out.println("Image loaded: " + selectedFile.getName());
+                } else {
+                    System.err.println("Invalid image file: " + selectedFile.getName());
+                }
             } catch (IOException e) {
                 System.err.println("Failed to load image: " + e.getMessage());
             }
         }
     }
+
 
     @FXML
     private void onUndo() {
