@@ -3,9 +3,11 @@ package se.pbt.peint;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
@@ -24,12 +26,21 @@ public class PeintController {
     @FXML
     private ToolBar toolBar;
 
+    @FXML
+    private ColorPicker colorPicker;
+
     private CanvasManager canvasManager;
     private ToolbarManager toolbarManager;
 
     public void initialize() {
         canvasManager = new CanvasManager(canvas, rootPane);
         toolbarManager = new ToolbarManager(toolBar, rootPane);
+
+        colorPicker.setValue(Color.BLACK);
+        colorPicker.setOnAction(event -> {
+            canvasManager.setDrawingColor(colorPicker.getValue());
+            System.out.println("Selected color: " + colorPicker.getValue());
+        });
     }
 
     @FXML
@@ -111,7 +122,8 @@ public class PeintController {
 
     @FXML
     private void onFill() {
-        System.out.println("Fill clicked");
+        canvasManager.fillCanvas();
+        System.out.println("Canvas filled with color: " + colorPicker.getValue());
     }
 
     @FXML

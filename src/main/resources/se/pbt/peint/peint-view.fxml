@@ -6,10 +6,12 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 
+<?import javafx.scene.control.ColorPicker?>
 <BorderPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml" fx:controller="se.pbt.peint.PeintController">
     <!-- Toolbar -->
     <top>
         <ToolBar fx:id="toolBar">
+            <!-- Load & Save -->
             <Button text="S" onAction="#onSave">
                 <tooltip>
                     <Tooltip text="Save the canvas as an image file" />
@@ -20,6 +22,7 @@
                     <Tooltip text="Load an image onto the canvas" />
                 </tooltip>
             </Button>
+            <!-- Undo, Redo & Reset -->
             <Button text="↺" onAction="#onUndo">
                 <tooltip>
                     <Tooltip text="Undo last action" />
@@ -30,23 +33,31 @@
                     <Tooltip text="Redo last undone action" />
                 </tooltip>
             </Button>
-            <Button text="F" onAction="#onFill">
-                <tooltip>
-                    <Tooltip text="Fill area with color" />
-                </tooltip>
-            </Button>
-            <Button text="⭷" onAction="#onToggleToolbarPosition">
-                <tooltip>
-                    <Tooltip text="Toggle toolbar position" />
-                </tooltip>
-            </Button>
             <Button text="C" onAction="#onClearCanvas">
                 <tooltip>
                     <Tooltip text="Clear the canvas" />
                 </tooltip>
             </Button>
+            <!-- Coloring -->
+            <Button text="F" onAction="#onFill">
+                <tooltip>
+                    <Tooltip text="Fill the canvas with the selected color" />
+                </tooltip>
+            </Button>
+            <ColorPicker fx:id="colorPicker">
+                <tooltip>
+                    <Tooltip text="Select a color for drawing" />
+                </tooltip>
+            </ColorPicker>
+            <!-- Toolbar Positioning -->
+            <Button text="⭷" onAction="#onToggleToolbarPosition">
+                <tooltip>
+                    <Tooltip text="Toggle toolbar position" />
+                </tooltip>
+            </Button>
         </ToolBar>
     </top>
+
     <!-- Canvas -->
     <center>
         <Canvas fx:id="canvas" width="800" height="600" />
