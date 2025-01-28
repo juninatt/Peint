@@ -8,12 +8,21 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * Performs flood fill operations on a canvas.
+ *
+ * <p>This class processes pixel data from a canvas using a flood fill
+ * algorithm to replace a contiguous area of color with a new color.</p>
+ */
 public class FloodFillProcessor {
     private final PixelReader pixelReader;
     private final PixelWriter pixelWriter;
     private final int canvasWidth;
     private final int canvasHeight;
 
+    /**
+     * Initializes the processor with canvas dimensions and pixel data handlers.
+     */
     public FloodFillProcessor(PixelReader pixelReader, PixelWriter pixelWriter, int canvasWidth, int canvasHeight) {
         this.pixelReader = pixelReader;
         this.pixelWriter = pixelWriter;
@@ -21,49 +30,63 @@ public class FloodFillProcessor {
         this.canvasHeight = canvasHeight;
     }
 
-
+    /**
+     * Fills a contiguous area starting at the given coordinates with a new color.
+     *
+     * <p>The algorithm replaces all connected pixels of the same initial color
+     * with the specified new color.</p>
+     */
     public void fill(double startX, double startY, Color newColor) {
-        // Get the target color at the starting point
         Color targetColor = pixelReader.getColor((int) startX, (int) startY);
 
         if (newColor.equals(targetColor)) {
             return;
         }
 
-        // Create a 2D boolean array to track visited pixels
         boolean[][] visited = new boolean[canvasWidth][canvasHeight];
-
-        // Create a queue to manage the points to be filled
         Queue<Point> queue = new LinkedList<>();
-        queue.add(new Point((int) startX, (int) startY)); // Add the starting point to the queue
+        queue.add(new Point((int) startX, (int) startY));
 
-        // Process the queue until it's empty
         while (!queue.isEmpty()) {
-            // Remove the next point from the queue
             Point point = queue.poll();
             int x = point.x;
             int y = point.y;
 
-            // Check if the point is out of bounds or already visited
-            if (x < 0 || x >= canvasWidth || y < 0 || y >= canvasHeight || visited[x][y]) {
+            if (shouldSkipPixel(x, y, visited, targetColor)) {
                 continue;
             }
 
-            Color currentColor = pixelReader.getColor(x, y);
-
-            if (!currentColor.equals(targetColor)) {
-                continue;
-            }
-
-            pixelWriter.setColor(x, y, newColor);
-
-            visited[x][y] = true;
-
-            // Add adjacent pixels to the queue for processing
-            queue.add(new Point(x + 1, y)); // Right
-            queue.add(new Point(x - 1, y)); // Left
-            queue.add(new Point(x, y + 1)); // Down
-            queue.add(new Point(x, y - 1)); // Up
+            fillPixel(x, y, newColor, visited);
+            enqueueNeighbors(queue, x, y);
         }
+    }
+
+    /**
+     * Checks if a pixel should be skipped during processing.
+     */
+    private boolean shouldSkipPixel(int x, int y, boolean[][] visited, Color targetColor) {
+        if (x < 0 || x >= canvasWidth || y < 0 || y >= canvasHeight || visited[x][y]) {
+            return true;
+        }
+        Color currentColor = pixelReader.getColor(x, y);
+        return !currentColor.equals(targetColor);
+    }
+
+    /**
+     * Fills a single pixel with the new color and marks it as visited.
+     */
+    private void fillPixel(int x, int y, Color newColor, boolean[][] visited) {
+        pixelWriter.setColor(x, y, newColor);
+        visited[x][y] = true;
+    }
+
+    /**
+     * Adds the neighboring pixels (up, down, left, right) to the processing queue.
+     */
+    private void enqueueNeighbors(Queue<Point> queue, int x, int y) {
+        queue.add(new Point(x + 1, y)); // Right
+        queue.add(new Point(x - 1, y)); // Left
+        queue.add(new Point(x, y + 1)); // Down
+        queue.add(new Point(x, y - 1)); // Up
     }
 }

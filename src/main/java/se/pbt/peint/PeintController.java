@@ -15,6 +15,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The main controller for the Peint application.
+ *
+ * <p>This class handles the application's user interface events, such as saving, loading,
+ * and editing the canvas, as well as managing the toolbar and color picker.</p>
+ */
 public class PeintController {
 
     @FXML
@@ -32,6 +38,9 @@ public class PeintController {
     private CanvasManager canvasManager;
     private ToolbarManager toolbarManager;
 
+    /**
+     * Initializes the controller and sets up managers for canvas and toolbar interactions.
+     */
     public void initialize() {
         canvasManager = new CanvasManager(canvas, rootPane);
         toolbarManager = new ToolbarManager(toolBar, rootPane);
@@ -40,9 +49,14 @@ public class PeintController {
         colorPicker.setOnAction(event -> canvasManager.setDrawingColor(colorPicker.getValue()));
     }
 
+    /**
+     * Handles the "Save" action, allowing the user to save the canvas as an image.
+     *
+     * <p>Displays a file chooser with filters for common formats (PNG, JPEG, BMP),
+     * ensuring compatibility and ease of selection for the user.</p>
+     */
     @FXML
     private void onSave() {
-        // Open a FileChooser to let the user select where to save the file
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Canvas As Image");
         fileChooser.getExtensionFilters().addAll(
@@ -74,6 +88,9 @@ public class PeintController {
         }
     }
 
+    /**
+     * Handles the "Load" action, allowing the user to load an image onto the canvas.
+     */
     @FXML
     private void onLoad() {
         // Open FileChooser for image selection
@@ -100,16 +117,25 @@ public class PeintController {
         }
     }
 
+    /**
+     * Undoes the last action on the canvas.
+     */
     @FXML
     private void onUndo() {
         canvasManager.undo();
     }
 
+    /**
+     * Redoes the last undone action on the canvas.
+     */
     @FXML
     private void onRedo() {
         canvasManager.redo();
     }
 
+    /**
+     * Activates the bucket fill tool, allowing the user to fill an area of the canvas with a color.
+     */
     @FXML
     private void onBucketFill() {
         canvas.setOnMouseClicked(event -> {
@@ -120,23 +146,34 @@ public class PeintController {
         });
     }
 
+    /**
+     * Toggles the toolbar's position between the top and left of the window.
+     */
     @FXML
     private void onToggleToolbarPosition() {
         toolbarManager.togglePosition();
     }
 
+    /**
+     * Clears the canvas by removing all drawings.
+     */
     @FXML
     private void onClearCanvas() {
         canvasManager.clearCanvas();
     }
 
+    /**
+     * Resets the canvas to its default state by disabling mouse events.
+     */
     private void resetCanvasEvents() {
         canvas.setOnMousePressed(null);
         canvas.setOnMouseDragged(null);
         canvas.setOnMouseReleased(null);
     }
 
-
+    /**
+     * Extracts the file extension from a given file name.
+     */
     private String getFileExtension(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
         return (dotIndex > 0 && dotIndex < fileName.length() - 1) ? fileName.substring(dotIndex + 1).toLowerCase() : null;

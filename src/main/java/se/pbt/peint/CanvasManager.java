@@ -12,6 +12,11 @@ import javafx.scene.paint.Color;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
 
+/**
+ * Manages the canvas, providing functionality for drawing, undo/redo, and flood fill operations.
+ *
+ * <p>This class encapsulates all logic related to canvas manipulation and state management.</p>
+ */
 public class CanvasManager {
     private final Canvas canvas;
     private final GraphicsContext gc;
@@ -21,6 +26,12 @@ public class CanvasManager {
 
     private Color drawingColor;
 
+    /**
+     * Creates a new CanvasManager to manage the specified canvas and its parent layout.
+     *
+     * @param canvas the canvas to manage
+     * @param parent the parent layout containing the canvas
+     */
     public CanvasManager(Canvas canvas, Region parent) {
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();
@@ -31,9 +42,12 @@ public class CanvasManager {
         setupDrawing();
     }
 
-
+    /**
+     * Sets up mouse event handlers for drawing on the canvas.
+     *
+     * <p>Pressing the mouse starts a new drawing path, and dragging continues the path.</p>
+     */
     private void setupDrawing() {
-        // Configures the canvas to save state and initialize drawing when the mouse is pressed
         canvas.setOnMousePressed(event -> {
             saveState();
             gc.setStroke(drawingColor);
@@ -42,7 +56,6 @@ public class CanvasManager {
             gc.stroke();
         });
 
-        // Configures the canvas to draw continuously as the mouse is dragged
         canvas.setOnMouseDragged(event -> {
             gc.setStroke(drawingColor);
             gc.lineTo(event.getX(), event.getY());
@@ -50,8 +63,11 @@ public class CanvasManager {
         });
     }
 
+
+    /**
+     * Undoes the last action on the canvas by popping the last state from the undo stack.
+     */
     public void undo() {
-        // Reverts the canvas to the previous state by popping the last state from the undo stack
         if (!undoStack.isEmpty()) {
             BufferedImage lastState = undoStack.pop();
             redoStack.push(SwingFXUtils.fromFXImage(canvas.snapshot(null, null), null));
@@ -59,8 +75,10 @@ public class CanvasManager {
         }
     }
 
+    /**
+     * Redoes the last undone action on the canvas by popping the next state from the redo stack.
+     */
     public void redo() {
-        // Restores a previously undone state by popping the next state from the redo stack
         if (!redoStack.isEmpty()) {
             BufferedImage nextState = redoStack.pop();
             undoStack.push(SwingFXUtils.fromFXImage(canvas.snapshot(null, null), null));
@@ -68,26 +86,36 @@ public class CanvasManager {
         }
     }
 
+    /**
+     * Clears all drawings from the canvas.
+     */
     public void clearCanvas() {
         saveState();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
+    /**
+     * Loads an image onto the canvas.
+     */
     public void loadImage(BufferedImage image) {
         saveState();
         gc.drawImage(SwingFXUtils.toFXImage(image, null), 0, 0);
     }
 
+    /**
+     * Fills an area on the canvas with a new color using {@link FloodFillProcessor}.
+     *
+     * <p>This method captures the current canvas state as an image to access pixel data,
+     * initializes tools for reading and writing pixels, and delegates the flood fill
+     * operation to a dedicated processor.</p>
+     */
     public void bucketFill(double startX, double startY, Color newColor) {
-        // Capture the current state of the canvas as a WritableImage to access pixel data
         WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
         canvas.snapshot(null, writableImage);
 
-        // Initialize tools for reading and writing pixel data from the canvas
         PixelReader pixelReader = writableImage.getPixelReader();
         PixelWriter pixelWriter = gc.getPixelWriter();
 
-        // Delegate the flood fill operation to a dedicated processor
         FloodFillProcessor floodFillProcessor = new FloodFillProcessor(
                 pixelReader, pixelWriter, (int) canvas.getWidth(), (int) canvas.getHeight()
         );
@@ -95,6 +123,11 @@ public class CanvasManager {
         floodFillProcessor.fill(startX, startY, newColor);
     }
 
+    /**
+     * Saves the current state of the canvas for undo functionality.
+     *
+     * <p>Clears the redo stack to ensure consistency after a new action.</p>
+     */
     private void saveState() {
         WritableImage snapshot = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
         canvas.snapshot(null, snapshot);
@@ -102,6 +135,11 @@ public class CanvasManager {
         redoStack.clear();
     }
 
+    /**
+     * Sets the drawing color for the canvas.
+     *
+     * @param color the new drawing color
+     */
     public void setDrawingColor(Color color) {
         this.drawingColor = color;
     }

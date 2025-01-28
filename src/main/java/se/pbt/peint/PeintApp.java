@@ -5,7 +5,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * The main entry point for the Peint application.
+ *
+ * <p>Peint is a simple, lightweight drawing application inspired by classic Paint tools.
+ * It provides basic functionality for creating and editing images, designed to be straightforward
+ * and easy to use.</p>
+ */
 public class PeintApp extends Application {
+
+    /**
+     * Starts the application by loading the main interface and displaying the primary stage.
+     *
+     * @param stage the primary stage for the application
+     */
     @Override
     public void start(Stage stage) {
         try {
@@ -20,6 +33,11 @@ public class PeintApp extends Application {
         }
     }
 
+    /**
+     * Launches the application.
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         launch();
     }
